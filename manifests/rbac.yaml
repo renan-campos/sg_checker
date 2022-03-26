@@ -5,7 +5,7 @@ metadata:
   name: net-checker
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: net-checker
 rules:
@@ -15,6 +15,25 @@ rules:
       - nodes
     verbs:
       - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: net-checker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: net-checker
+subjects:
+  - kind: ServiceAccount
+    name: net-checker
+    namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: net-checker
+rules:
   - apiGroups:
     - batch
     resources:
