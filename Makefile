@@ -1,9 +1,9 @@
 IMG ?= quay.io/rcampos/net-checker:latest
 
-all: bin/scout bin/netChecker
+all: bin/netScout bin/netChecker
 
-bin/scout: cmd/scout.go
-	go build -o bin/scout cmd/scout.go
+bin/netScout: cmd/scout.go
+	go build -o bin/netScout cmd/scout.go
 
 bin/netChecker: cmd/netChecker.go
 	go build -o bin/netChecker cmd/netChecker.go
@@ -21,4 +21,4 @@ undeploy:
 	kubectl delete -f manifests/
 
 clean:
-	rm -f bin/scout bin/netChecker
+	rm -f bin/netScout bin/netChecker

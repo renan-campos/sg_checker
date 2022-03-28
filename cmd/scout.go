@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
@@ -26,8 +27,8 @@ func main() {
 			continue
 		}
 
-		var b []byte
-		_, err = conn.Read(b)
+		var msg []byte = make([]byte, 5)
+		_, err = bufio.NewReader(conn).Read(msg)
 		if err != nil {
 			fmt.Fprintf(os.Stderr,
 				"Failed to read from connection on port %s: %s\n", port, err)
@@ -35,13 +36,13 @@ func main() {
 			ln.Close()
 			continue
 		}
-		fmt.Printf("\tmessage receieved on port %s from %s\n",
-			port, conn.RemoteAddr())
+		fmt.Printf("\tmessage receieved on port %s from %s: %s\n",
+			port, conn.RemoteAddr(), string(msg))
 
 		_, err = fmt.Fprintf(conn, "pong")
 		if err != nil {
 			fmt.Fprintf(os.Stderr,
-				"Failed to connection connection on port %s: %s\n", port, err)
+				"Failed to send message on port %s: %s\n", port, err)
 			conn.Close()
 			ln.Close()
 			continue
