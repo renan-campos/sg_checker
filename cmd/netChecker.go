@@ -161,8 +161,10 @@ func main() {
 		context.Background(), scoutJobRequest.Name, metav1.DeleteOptions{})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to delete scout job: %s", err)
+		os.Exit(1)
 	}
 
+	fmt.Println("Network check complete!")
 }
 
 func setupK8sClient() (*kubernetes.Clientset, error) {
