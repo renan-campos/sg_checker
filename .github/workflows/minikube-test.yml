@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: setup minikube
-        uses: manusa/actions-setup-minikube@2.4.3
+        uses: manusa/actions-setup-minikube@v2.4.3
         with:
           # Need two nodes, so that the checker can be deployed on one node, and the scout on the other.
           start args: "--nodes=3"
