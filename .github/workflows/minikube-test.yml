@@ -29,6 +29,8 @@ jobs:
       - name: setup minikube
         uses: manusa/actions-setup-minikube@v2.4.3
         with:
+          minikube version: 'v1.24.0'
+          kubernetes version: 'v1.23.0'
           # Need two nodes, so that the checker can be deployed on one node, and the scout on the other.
           start args: "--nodes=3"
 
