@@ -23,10 +23,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: setup minikube
+      - name: Setup minikube
         uses: manusa/actions-setup-minikube@v2.4.3
         with:
           minikube version: 'v1.24.0'
@@ -34,13 +34,27 @@ jobs:
           # Need two nodes, so that the checker can be deployed on one node, and the scout on the other.
           start args: "--nodes=3"
           driver: docker
-
-      # Runs a set of commands using the runners shell
-      - name: Show repo
+      - name: Build image into minikube cluster
         run: |
-          cd $GITHUB_WORKSPACE
-          ls
-          
-      - name: Show nodes
+          export SHELL=/bin/bash
+          eval $(minikube -p minikube docker-env)
+          make image
+          echo -n "verifying images:"
+          docker images
+      # TODO: Come up with a better way to do this
+      - name: Sleep 5
         run: |
+          sleep 5
           kubectl get nodes
+      - name: Deploy sg_chek
+        run: |
+          kubectl apply -f manifests/rbac.yaml
+          sleep 5
+          kubectl apply -f manifests/checker.yaml
+      - name: Sleep 60
+        run: |
+          sleep 60
+      - name: Show logs
+        run: |
+          for pod in $(kubectl get pods -o json | jq -r .items[].metadata.name); do kubectl logs pod/$pod; done
+        
