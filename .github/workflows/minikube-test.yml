@@ -33,6 +33,7 @@ jobs:
           kubernetes version: 'v1.23.0'
           # Need two nodes, so that the checker can be deployed on one node, and the scout on the other.
           start args: "--nodes=3"
+          driver: docker
 
       # Runs a set of commands using the runners shell
       - name: Show repo
